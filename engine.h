@@ -256,6 +256,27 @@ static int32_t engine_handle_input(struct android_app* app, AInputEvent* event) 
     return 0;
 }
 
+/* Initialise engine  */
+static void engine_init_app(struct engine* engine, struct android_app* app) {
+  
+    state->userData = engine;
+    state->onAppCmd = engine_handle_cmd;
+    state->onInputEvent = engine_handle_input;
+    engine->app = state;
+
+    // Prepare to monitor accelerometer
+    engine->sensorManager = ASensorManager_getInstance();
+    engine->accelerometerSensor = ASensorManager_getDefaultSensor(engine.sensorManager,
+            ASENSOR_TYPE_ACCELEROMETER);
+    engine->sensorEventQueue = ASensorManager_createEventQueue(engine.sensorManager,
+            state->looper, LOOPER_ID_USER, NULL, NULL);
+    
+    if (state->savedState != NULL) {
+        // We are starting with a previous saved state; restore from it.
+        engine->state = *(struct saved_state*)state->savedState;
+    }
+}
+
 /**
  * Process the next main command.
  */
