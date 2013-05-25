@@ -1,4 +1,4 @@
-#Fri May 24 07:46:03 GMT+01:00 2013
+#Sat May 25 11:21:12 GMT+01:00 2013
 conf_patch=true
 conf_internal=false
 prepare_cmds=export PATH\=/busybox-virtual\:(c4droid\:DATADIR)\:(c4droid\:GCCROOT)bin\:(c4droid\:GCCROOT)(c4droid\:PREFIX)/bin/\:$PATH\nexport CC\="(c4droid\:PREFIX)-gcc (c4droid\:MAKEMODEARGS)"\nexport CXX\="(c4droid\:PREFIX)-g++ (c4droid\:MAKEMODEARGS)"\nexport SHELL\="(c4droid\:DATADIR)busybox sh"\ncd (c4droid\:CURSRCDIR)

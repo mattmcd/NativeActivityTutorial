@@ -36,7 +36,7 @@ void android_main(struct android_app* state) {
     app_dummy();
 
     memset(&engine, 0, sizeof(engine));
-    engine_init_app(&engine, app);
+    engine_init_app(&engine, state);
 
     // loop waiting for stuff to do.
 
