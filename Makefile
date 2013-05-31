@@ -1,7 +1,7 @@
-all: libcube.so libcube_cpp.so
+all: libcube.so testCube
 
-cube_cpp.o: cube_cpp.cpp engine.hpp engine.cpp
-	$(CXX) -o cube_cpp.o cube_cpp.cpp engine.cpp
+testCube: cube_cpp.cpp engine.hpp engine.cpp
+	$(CXX) -o testCube cube_cpp.cpp engine.cpp -shared -lEGL -lGLESv1_CM -lm
 
 libcube.so: cube.o
 		$(CC) -o libcube.so cube.o -shared -lEGL -lGLESv1_CM -lm
