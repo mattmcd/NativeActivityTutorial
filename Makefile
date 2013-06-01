@@ -1,6 +1,6 @@
 all: libcube.so test_Cube libcube_cpp.so
 
-cube_cpp.o: engine.hpp
+cube_cpp.o:  engine.hpp
 
 engine.o: engine.hpp
 
