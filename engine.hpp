@@ -18,44 +18,45 @@
 /**
  * Our saved state data.
  */
-struct saved_state {
-    float angle;
-    int32_t x;
-    int32_t y;
+struct saved_state
+{
+  float angle;
+  int32_t x;
+  int32_t y;
 };
 
 /**
  * Shared state for our app.
  */
-class Engine {
-    public:
-      Engine() {
-      	scene = new Scene();
-      }
-      ~Engine() {
-      	delete scene;
-      }
-      int init_display();
-      void draw_frame();
-      void term_display();
-      void init_app(struct android_app* state);
+class Engine
+{
+  public:
+    Engine()
+    {
+      scene = new Scene();
+    }
+    ~Engine()
+    {
+      delete scene;
+    }
+    int init_display();
+    void draw_frame();
+    void term_display();
+    void init_app(struct android_app *state);
 
     // private:
-    struct android_app* app;
+    struct android_app *app;
 
-    ASensorManager* sensorManager;
-    const ASensor* accelerometerSensor;
-    ASensorEventQueue* sensorEventQueue;
+    ASensorManager *sensorManager;
+    const ASensor *accelerometerSensor;
+    ASensorEventQueue *sensorEventQueue;
 
     int animating;
-    EGLDisplay display;
-    EGLSurface surface;
-    EGLContext context;
-    int32_t width;
-    int32_t height;
+    //	int32_t width;
+    //	int32_t height;
     struct saved_state state;
-    
-    Scene* scene;
+
+    Scene *scene;
 };
 
 #endif
