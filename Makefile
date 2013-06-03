@@ -1,17 +1,19 @@
 all: libcube.so test_Cube libcube_cpp.so
 
-cube_cpp.o:  engine.hpp
+cube_cpp.o:  engine.hpp scene.hpp
 
-engine.o: engine.hpp
+engine.o: engine.hpp scene.hpp
 
-test_Cube: cube_cpp.o engine.o
-	$(CXX) -o test_Cube cube_cpp.o engine.o -shared -lEGL -lGLESv1_CM -lm
+scene.o: scene.hpp
+
+test_Cube: cube_cpp.o engine.o scene.o
+	$(CXX) -o test_Cube cube_cpp.o scene.o engine.o -shared -lEGL -lGLESv1_CM -lm
 
 libcube.so: cube.o
 		$(CC) -o libcube.so cube.o -shared -lEGL -lGLESv1_CM -lm
 
-libcube_cpp.so: cube_cpp.o engine.o
-		$(CXX) -o libcube_cpp.so cube_cpp.o engine.o -shared -lEGL -lGLESv1_CM -lm
+libcube_cpp.so: cube_cpp.o engine.o scene.o
+		$(CXX) -o libcube_cpp.so cube_cpp.o engine.o scene.o -shared -lEGL -lGLESv1_CM -lm
 clean:
 		rm engine.o
 		rm libcube.so cube.o

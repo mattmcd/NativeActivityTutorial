@@ -13,6 +13,8 @@
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "native-activity", __VA_ARGS__))
 
+#include "scene.hpp"
+
 /**
  * Our saved state data.
  */
@@ -27,6 +29,12 @@ struct saved_state {
  */
 class Engine {
     public:
+      Engine() {
+      	scene = new Scene();
+      }
+      ~Engine() {
+      	delete scene;
+      }
       int init_display();
       void draw_frame();
       void term_display();
@@ -46,6 +54,8 @@ class Engine {
     int32_t width;
     int32_t height;
     struct saved_state state;
+    
+    Scene* scene;
 };
 
 #endif

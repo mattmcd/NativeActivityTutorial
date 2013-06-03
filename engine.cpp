@@ -1,81 +1,5 @@
 #include "engine.hpp"
 
-/**
- * Initialize an EGL context for the current display.
- */
-
-//GLUES
-
-static void __gluMakeIdentityf(GLfloat m[16])
-{
-    m[0+4*0] = 1; m[0+4*1] = 0; m[0+4*2] = 0; m[0+4*3] = 0;
-    m[1+4*0] = 0; m[1+4*1] = 1; m[1+4*2] = 0; m[1+4*3] = 0;
-    m[2+4*0] = 0; m[2+4*1] = 0; m[2+4*2] = 1; m[2+4*3] = 0;
-    m[3+4*0] = 0; m[3+4*1] = 0; m[3+4*2] = 0; m[3+4*3] = 1;
-}
-
-#define __glPi 3.14159265358979323846
-
-void gluPerspectivef(GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar)
-{
-    GLfloat m[4][4];
-    GLfloat sine, cotangent, deltaZ;
-    GLfloat radians=(GLfloat)(fovy/2.0f*__glPi/180.0f);
-
-
-    deltaZ=zFar-zNear;
-    sine=(GLfloat)sin(radians);
-    if ((deltaZ==0.0f) || (sine==0.0f) || (aspect==0.0f))
-    {
-        return;
-    }
-    cotangent=(GLfloat)(cos(radians)/sine);
-
-    __gluMakeIdentityf(&m[0][0]);
-    m[0][0] = cotangent / aspect;
-    m[1][1] = cotangent;
-    m[2][2] = -(zFar + zNear) / deltaZ;
-    m[2][3] = -1.0f;
-    m[3][2] = -2.0f * zNear * zFar / deltaZ;
-    m[3][3] = 0;
-    glMultMatrixf(&m[0][0]);
-}
- 
- 
-GLfloat box[] = {
-	// FRONT
-	-0.5f, -0.5f,  0.5f,
-	 0.5f, -0.5f,  0.5f,
-	-0.5f,  0.5f,  0.5f,
-	 0.5f,  0.5f,  0.5f,
-	// BACK
-	-0.5f, -0.5f, -0.5f,
-	-0.5f,  0.5f, -0.5f,
-	 0.5f, -0.5f, -0.5f,
-	 0.5f,  0.5f, -0.5f,
-	// LEFT
-	-0.5f, -0.5f,  0.5f,
-	-0.5f,  0.5f,  0.5f,
-	-0.5f, -0.5f, -0.5f,
-	-0.5f,  0.5f, -0.5f,
-	// RIGHT
-	 0.5f, -0.5f, -0.5f,
-	 0.5f,  0.5f, -0.5f,
-	 0.5f, -0.5f,  0.5f,
-	 0.5f,  0.5f,  0.5f,
-	// TOP
-	-0.5f,  0.5f,  0.5f,
-	 0.5f,  0.5f,  0.5f,
-	 -0.5f,  0.5f, -0.5f,
-	 0.5f,  0.5f, -0.5f,
-	// BOTTOM
-	-0.5f, -0.5f,  0.5f,
-	-0.5f, -0.5f, -0.5f,
-	 0.5f, -0.5f,  0.5f,
-	 0.5f, -0.5f, -0.5f,
-};    
-
-
 int Engine::init_display()
 {
 	// initialize OpenGL ES and EGL
@@ -142,18 +66,8 @@ int Engine::init_display()
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClearDepthf(1.0f);
-	glVertexPointer(3, GL_FLOAT, 0, box);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glShadeModel(GL_FLAT);
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
-	glViewport(0, 0, w, h);
-	gluPerspectivef(45.0f, (1.0f * w) / h, 1.0f, 100.0f);
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	
+	scene->init(w,h);
 
 	return 0;
 }
@@ -174,16 +88,7 @@ void Engine::draw_frame()
 	glTranslatef(0, -1, -6);
 	glRotatef(this->state.y, 1.0f, 0.0f, 0.0f);
 	glRotatef(-this->state.x, 0.0f, 1.0f, 0.0f);
-	glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	glDrawArrays(GL_TRIANGLE_STRIP, 4, 4);
-	glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
-	glDrawArrays(GL_TRIANGLE_STRIP, 8, 4);
-	glDrawArrays(GL_TRIANGLE_STRIP, 12, 4);
-	glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
-	glDrawArrays(GL_TRIANGLE_STRIP, 16, 4);
-	glDrawArrays(GL_TRIANGLE_STRIP, 20, 4);
-	glFlush();
+	scene->draw();
 	eglSwapBuffers(this->display, this->surface);
 }
 
