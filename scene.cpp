@@ -1,38 +1,5 @@
 #include "scene.hpp"
 
-GLfloat box[] = {
-  // FRONT
-  -0.5f, -0.5f, 0.5f,
-  0.5f, -0.5f, 0.5f,
-  -0.5f, 0.5f, 0.5f,
-  0.5f, 0.5f, 0.5f,
-  // BACK
-  -0.5f, -0.5f, -0.5f,
-  -0.5f, 0.5f, -0.5f,
-  0.5f, -0.5f, -0.5f,
-  0.5f, 0.5f, -0.5f,
-  // LEFT
-  -0.5f, -0.5f, 0.5f,
-  -0.5f, 0.5f, 0.5f,
-  -0.5f, -0.5f, -0.5f,
-  -0.5f, 0.5f, -0.5f,
-  // RIGHT
-  0.5f, -0.5f, -0.5f,
-  0.5f, 0.5f, -0.5f,
-  0.5f, -0.5f, 0.5f,
-  0.5f, 0.5f, 0.5f,
-  // TOP
-  -0.5f, 0.5f, 0.5f,
-  0.5f, 0.5f, 0.5f,
-  -0.5f, 0.5f, -0.5f,
-  0.5f, 0.5f, -0.5f,
-  // BOTTOM
-  -0.5f, -0.5f, 0.5f,
-  -0.5f, -0.5f, -0.5f,
-  0.5f, -0.5f, 0.5f,
-  0.5f, -0.5f, -0.5f,
-};
-
 void Scene::init_display()
 {
   // initialize OpenGL ES and EGL
@@ -99,66 +66,6 @@ int Scene::init_context()
 
   this->init_scene();
   return 0;
-}
-
-void Scene::init_scene()
-{
-  glVertexPointer(3, GL_FLOAT, 0, box);
-  glEnableClientState(GL_VERTEX_ARRAY);
-  glShadeModel(GL_FLAT);
-
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-
-  glViewport(0, 0, w, h);
-  gluPerspectivef(45.0f, (1.0f * w) / h, 1.0f, 100.0f);
-
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-}
-
-void Scene::draw(EGLint x, EGLint y)
-{
-  if (this->display == NULL)
-  {
-    // No display.
-    return;
-  }
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  int nRows = 10;
-  int nCols = 15;
-  float a = sqrt(3);
-
-  for (int i = 0; i < nRows; ++i)
-  {
-    for (int j = 0; j < nCols; ++j)
-    {
-      glLoadIdentity();
-      glTranslatef(a * j - a * nCols * 0.5, a * i - a * nRows * 0.5,
-          -16);
-      glRotatef(y, 1.0f, 0.0f, 0.0f);
-      glRotatef(-x, 0.0f, 1.0f, 0.0f);
-      this->draw_box();
-    }
-  }
-
-  glFlush();
-
-  eglSwapBuffers(this->display, this->surface);
-}
-
-void Scene::draw_box()
-{
-  glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
-  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-  glDrawArrays(GL_TRIANGLE_STRIP, 4, 4);
-  glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
-  glDrawArrays(GL_TRIANGLE_STRIP, 8, 4);
-  glDrawArrays(GL_TRIANGLE_STRIP, 12, 4);
-  glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
-  glDrawArrays(GL_TRIANGLE_STRIP, 16, 4);
-  glDrawArrays(GL_TRIANGLE_STRIP, 20, 4);
 }
 
 void Scene::terminate()

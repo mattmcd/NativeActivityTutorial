@@ -9,9 +9,9 @@ class Scene
 {
   public:
     void init_display();
-    void init_scene();
     int init_context();
-    void draw(EGLint x, EGLint y);
+    virtual void init_scene() const = 0;
+    virtual void draw(EGLint x, EGLint y) const = 0;
     void terminate();
 
     EGLConfig config;
@@ -22,8 +22,7 @@ class Scene
     // Set by init_display
     EGLint w, h, format;
 
-  private:
-    void draw_box();
+  protected:
     /**
      * Initialize an EGL context for the current display.
      */

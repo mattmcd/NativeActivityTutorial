@@ -31,10 +31,7 @@ struct saved_state
 class Engine
 {
   public:
-    Engine()
-    {
-      scene = new Scene();
-    }
+    Engine(Scene* scene_ ) : scene(scene_) {}
     ~Engine()
     {
       delete scene;

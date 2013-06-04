@@ -23,6 +23,7 @@
 #include <android_native_app_glue.h>
 
 #include "engine.hpp"  
+#include "boxes_scene.hpp"
 
 /**
  * This is the main entry point of a native application that is using
@@ -30,7 +31,8 @@
  * event loop for receiving input events and doing other things.
  */
 void android_main(struct android_app* state) {
-    Engine engine;
+    Scene* scene = new BoxesCircleScene();
+    Engine engine(scene);
 
     // Make sure glue isn't stripped.
     app_dummy();
