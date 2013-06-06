@@ -1,5 +1,14 @@
 #include "boxes_scene.hpp"
 
+#include "scene_factory.hpp"
+
+namespace 
+{
+  SceneFactory theFactory = SceneFactory::getInstance();
+  theFactory.registerScene( "boxes", []() { return new BoxesScene() } );
+  theFactory.registerScene( "circle", [](){ return new BoxesCircleScene() });
+}
+
 GLfloat box[] = {
   // FRONT
   -0.5f, -0.5f, 0.5f,
@@ -58,8 +67,8 @@ void BoxesScene::draw(EGLint x, EGLint y) const
   }
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  int nRows = 4;
-  int nCols = 4;
+  int nRows = 7;
+  int nCols = 11;
   float a = sqrt(3);
 
   for (int i = 0; i < nRows; ++i)
@@ -67,8 +76,7 @@ void BoxesScene::draw(EGLint x, EGLint y) const
     for (int j = 0; j < nCols; ++j)
     {
       glLoadIdentity();
-      glTranslatef(a * j - a * nCols * 0.5, a * i - a * nRows * 0.5,
-          -16);
+      glTranslatef(a * j - a * nCols * 0.5, a * i - a * nRows * 0.5, -16);
       glRotatef(y, 1.0f, 0.0f, 0.0f);
       glRotatef(-x, 0.0f, 1.0f, 0.0f);
       this->draw_box();
@@ -110,10 +118,18 @@ void BoxesCircleScene::draw(EGLint x, EGLint y) const
   {
     glLoadIdentity();
     glTranslatef(r*cos( (2*pi*i)/n), r*sin((2*pi*i)/n),   -16);
-    glRotatef(y, 1.0f, 0.0f, 0.0f);
-    glRotatef(-x, 0.0f, 1.0f, 0.0f);
+    glRotatef(y*360.0f/h, 1.0f, 0.0f, 0.0f);
+    glRotatef(-x*360.0f/w, 0.0f, 1.0f, 0.0f);
+    glRotatef( 360.0f * i /n, 0.0f,0.0f, 1.0f);
     this->draw_box();
   }
+
+    glLoadIdentity();
+    glRotatef( -180.0f*atan2(y,x)/pi, 0.0f,0.0f, 1.0f);
+    glTranslatef( 0.0f, 0.0f,   -16);
+    // glRotatef(y*360.0f/h, 1.0f, 0.0f, 0.0f);
+    // glRotatef(-x*360.0f/w, 0.0f, 1.0f, 0.0f);
+    this->draw_box();
 
   glFlush();
 
