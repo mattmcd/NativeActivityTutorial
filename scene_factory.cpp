@@ -1,8 +1,8 @@
 #include "scene_factory.hpp"
 
-void SceneFactory::registerScene( std::string name, CreateSceneFcn fcn) {
+void SceneFactory::registerScene( std::string name, std::function<Scene* ()> fcn) {
   SceneCreatorFcns.insert( 
-    std::pair<std::string, CreateSceneFcn>(name, fcn));
+    std::pair<std::string, std::function<Scene* ()>>(name, fcn));
 }
 
 Scene* SceneFactory::getScene( std::string name) {

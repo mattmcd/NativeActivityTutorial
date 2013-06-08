@@ -32,7 +32,7 @@
  */
 void android_main(struct android_app* state) {
     SceneFactory theFactory = SceneFactory::getInstance();
-    Scene* scene = theFactory.getScene( "boxes" );
+    Scene* scene = theFactory.getScene( "circles" );
     //Scene* scene = new BoxesScene();
     
     Engine engine(scene);

@@ -1,12 +1,10 @@
-#include "boxes_scene.hpp"
-
 #include "scene_factory.hpp"
+#include "boxes_scene.hpp"
 
 namespace 
 {
-  SceneFactory theFactory = SceneFactory::getInstance();
-  theFactory.registerScene( "boxes", []() { return new BoxesScene() } );
-  theFactory.registerScene( "circle", [](){ return new BoxesCircleScene() });
+  auto boxReg = SceneRegister("boxes",  []() { return new BoxesScene(); });
+  auto circReg = SceneRegister("circles",  []() { return new BoxesCircleScene(); });
 }
 
 GLfloat box[] = {
