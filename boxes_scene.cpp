@@ -50,7 +50,7 @@ void BoxesScene::init_scene() const
   glLoadIdentity();
 
   glViewport(0, 0, w, h);
-  gluPerspectivef(45.0f, (1.0f * w) / h, 1.0f, 100.0f);
+  gluPerspectivef(45.0f, (1.0f * w) / h, 2.0f, 100.0f);
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
@@ -111,20 +111,41 @@ void BoxesCircleScene::draw(EGLint x, EGLint y) const
   int n =8;
   float r = sqrt(3)*3;
   float pi = 4.0*atan(1);
+  float x_pos;
+  float y_pos;
 
+  // Coordinates relative to top left corner
+  float xp = (1.0f*x - w/2)/h;
+  float yp = -(1.0f*y - h/2)/h;
+  float theta = atan2( yp, xp);
+
+  // Draw a small box under touch point
+  glLoadIdentity();
+  float znear = 2.0f;
+  float zd = 12.0f;
+  float rp = sqrt( 2*(xp*xp + yp*yp))*(zd+znear)/znear; 
+  glTranslatef( rp*cos(theta), rp*sin(theta), -zd);
+  glScalef( 0.5f, 0.5f, 0.5f);
+  this->draw_box();
+      
   for (int i = 0; i < n; ++i)
   {
     glLoadIdentity();
-    glTranslatef(r*cos( (2*pi*i)/n), r*sin((2*pi*i)/n),   -16);
-    glRotatef(y*360.0f/h, 1.0f, 0.0f, 0.0f);
-    glRotatef(-x*360.0f/w, 0.0f, 1.0f, 0.0f);
-    glRotatef( 360.0f * i /n, 0.0f,0.0f, 1.0f);
+    x_pos =   r*cos( (2*pi*i)/n);
+    y_pos = r*sin((2*pi*i)/n);
+    glTranslatef(x_pos, y_pos,   -16);
+    
+    // glRotatef(y*360.0f/h, 1.0f, 0.0f, 0.0f);
+    // glRotatef(-x*360.0f/w, 0.0f, 1.0f, 0.0f);
+    // glRotatef( 360.0f * i /n, 0.0f,0.0f, 1.0f);
+    glRotatef( 180.0f*theta/pi, 0.0f,0.0f, 1.0f);
     this->draw_box();
   }
+    
 
     glLoadIdentity();
-    glRotatef( -180.0f*atan2(y,x)/pi, 0.0f,0.0f, 1.0f);
     glTranslatef( 0.0f, 0.0f,   -16);
+    glRotatef( 180.0f*theta/pi, 0.0f,0.0f, 1.0f);
     // glRotatef(y*360.0f/h, 1.0f, 0.0f, 0.0f);
     // glRotatef(-x*360.0f/w, 0.0f, 1.0f, 0.0f);
     this->draw_box();

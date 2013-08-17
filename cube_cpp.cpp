@@ -35,6 +35,9 @@ void android_main(struct android_app* state) {
     Scene* scene = theFactory.getScene( "circles" );
     //Scene* scene = new BoxesScene();
     
+    if ( NULL == scene )
+    	return; // Early exit
+    
     Engine engine(scene);
 
     // Make sure glue isn't stripped.
