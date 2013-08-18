@@ -109,7 +109,7 @@ void BoxesCircleScene::draw(EGLint x, EGLint y) const
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   int n =8;
-  float r = sqrt(3)*3;
+  float r = sqrt(3)*3* (1.0f*w/h <	1.0f ? 1.0f*w/h : 1.0f);
   float pi = 4.0*atan(1);
   float x_pos;
   float y_pos;
